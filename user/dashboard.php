@@ -24,7 +24,7 @@ $user = $_SESSION['user'];
 </div>
 
 <div class="dashboard">
-    <h1>User <?php echo htmlspecialchars($user['fname'] . " " . $user['lname']); ?> is logged in</h1>
+    <h1>Welcome, <?php echo htmlspecialchars($user['fname'] . " " . $user['lname']); ?>!</h1>
     <p>Browse second-hand clothing, add items to your cart, request to sell clothing, and track your orders.</p>
 </div>
 
