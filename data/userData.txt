@@ -1,5 +1,5 @@
-Ndumiso,Gumede,ndumiso2309@gmail.com,29ef52e7563626a96cea7f4b4085c124,approved
-Snqobile,Cele,SNQ1201@gmail.com,29ef52e7563626a96cea7f4b4085c124,pending
-Luyanda,Magubane,DOCMAN@gmail.com,29ef52e7563626a96cea7f4b4085c124,approved
-Bongumusa,Ngcobo,NgcoboOmkhulu@gmail.com,29ef52e7563626a96cea7f4b4085c124,pending
-Fortune,Mnguni,FoortuneM@gmail.com,29ef52e7563626a96cea7f4b4085c124,approved
+John,Doe,jdoe,j.doe@abc.co.za,25d55ad283aa400af464c76d713c07ad,12 Market Street,approved
+Lerato,Mokoena,lmokoena,lerato@example.com,25d55ad283aa400af464c76d713c07ad,45 Rose Avenue,pending
+Sipho,Dlamini,sdlamini,sipho@example.com,25d55ad283aa400af464c76d713c07ad,8 Main Road,approved
+Amy,Smith,asmith,amy@example.com,25d55ad283aa400af464c76d713c07ad,19 Oak Lane,pending
+Thabo,Naidoo,tnaidoo,thabo@example.com,25d55ad283aa400af464c76d713c07ad,77 Long Street,approved

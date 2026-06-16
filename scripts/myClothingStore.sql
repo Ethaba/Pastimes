@@ -1,15 +1,12 @@
-<?php
-include("../config/DBConn.php");
+DROP TABLE IF EXISTS tblMessage;
+DROP TABLE IF EXISTS tblSellRequest;
+DROP TABLE IF EXISTS tblOrderLine;
+DROP TABLE IF EXISTS tblAorder;
+DROP TABLE IF EXISTS tblClothes;
+DROP TABLE IF EXISTS tblAdmin;
+DROP TABLE IF EXISTS tblUser;
 
-$conn->query("DROP TABLE IF EXISTS tblMessage");
-$conn->query("DROP TABLE IF EXISTS tblSellRequest");
-$conn->query("DROP TABLE IF EXISTS tblOrderLine");
-$conn->query("DROP TABLE IF EXISTS tblAorder");
-$conn->query("DROP TABLE IF EXISTS tblClothes");
-$conn->query("DROP TABLE IF EXISTS tblAdmin");
-$conn->query("DROP TABLE IF EXISTS tblUser");
-
-$conn->query("CREATE TABLE tblUser (
+CREATE TABLE tblUser (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     fname VARCHAR(50),
     lname VARCHAR(50),
@@ -18,15 +15,15 @@ $conn->query("CREATE TABLE tblUser (
     password VARCHAR(255),
     address VARCHAR(255),
     status VARCHAR(20)
-)");
+);
 
-$conn->query("CREATE TABLE tblAdmin (
+CREATE TABLE tblAdmin (
     admin_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50),
     password VARCHAR(255)
-)");
+);
 
-$conn->query("CREATE TABLE tblClothes (
+CREATE TABLE tblClothes (
     cloth_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
     brand VARCHAR(100),
@@ -36,9 +33,9 @@ $conn->query("CREATE TABLE tblClothes (
     image VARCHAR(255),
     quantity INT,
     status VARCHAR(20)
-)");
+);
 
-$conn->query("CREATE TABLE tblAorder (
+CREATE TABLE tblAorder (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     order_date DATETIME,
@@ -46,9 +43,9 @@ $conn->query("CREATE TABLE tblAorder (
     delivery_address VARCHAR(255),
     total_amount DECIMAL(10,2),
     FOREIGN KEY (user_id) REFERENCES tblUser(user_id)
-)");
+);
 
-$conn->query("CREATE TABLE tblOrderLine (
+CREATE TABLE tblOrderLine (
     order_line_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
     cloth_id INT,
@@ -56,9 +53,9 @@ $conn->query("CREATE TABLE tblOrderLine (
     price DECIMAL(10,2),
     FOREIGN KEY (order_id) REFERENCES tblAorder(order_id),
     FOREIGN KEY (cloth_id) REFERENCES tblClothes(cloth_id)
-)");
+);
 
-$conn->query("CREATE TABLE tblSellRequest (
+CREATE TABLE tblSellRequest (
     request_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     clothing_name VARCHAR(100),
@@ -69,9 +66,9 @@ $conn->query("CREATE TABLE tblSellRequest (
     request_date DATETIME,
     admin_note TEXT,
     FOREIGN KEY (user_id) REFERENCES tblUser(user_id)
-)");
+);
 
-$conn->query("CREATE TABLE tblMessage (
+CREATE TABLE tblMessage (
     message_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     admin_id INT,
@@ -80,44 +77,22 @@ $conn->query("CREATE TABLE tblMessage (
     sender VARCHAR(20),
     message_date DATETIME,
     FOREIGN KEY (user_id) REFERENCES tblUser(user_id)
-)");
+);
 
-$userDataFile = file("../data/userData.txt");
-foreach ($userDataFile as $line) {
-    $line = trim($line);
-    if (!empty($line)) {
-        $userData = explode(",", $line);
+INSERT INTO tblUser (fname,lname,username,email,password,address,status) VALUES
+('John','Doe','jdoe','j.doe@abc.co.za',MD5('12345678'),'12 Market Street','approved'),
+('Lerato','Mokoena','lmokoena','lerato@example.com',MD5('12345678'),'45 Rose Avenue','pending'),
+('Sipho','Dlamini','sdlamini','sipho@example.com',MD5('12345678'),'8 Main Road','approved'),
+('Amy','Smith','asmith','amy@example.com',MD5('12345678'),'19 Oak Lane','pending'),
+('Thabo','Naidoo','tnaidoo','thabo@example.com',MD5('12345678'),'77 Long Street','approved');
 
-        // Each user line must have seven fields for the Part 3 user table.
-        if (count($userData) < 7) {
-            continue;
-        }
+INSERT INTO tblAdmin (username,password) VALUES
+('admin', MD5('admin123')),
+('Ndumiso', MD5('Ndumiso2309'));
 
-        $fname = mysqli_real_escape_string($conn, $userData[0]);
-        $lname = mysqli_real_escape_string($conn, $userData[1]);
-        $username = mysqli_real_escape_string($conn, $userData[2]);
-        $email = mysqli_real_escape_string($conn, $userData[3]);
-        $password = mysqli_real_escape_string($conn, $userData[4]);
-        $address = mysqli_real_escape_string($conn, $userData[5]);
-        $status = mysqli_real_escape_string($conn, $userData[6]);
-        
-        $conn->query("INSERT INTO tblUser (fname,lname,username,email,password,address,status) VALUES 
-        ('$fname','$lname','$username','$email','$password','$address','$status')");
-    }
-}
-
-$conn->query("INSERT INTO tblAdmin (username,password) VALUES 
-('admin', md5('admin123')),
-('Ndumiso', md5('Ndumiso2309'))
-");
-
-$conn->query("INSERT INTO tblClothes (name,brand,description,price,size,image,quantity,status) VALUES
+INSERT INTO tblClothes (name,brand,description,price,size,image,quantity,status) VALUES
 ('Vintage T-Shirt','Nike','Soft second-hand branded shirt in good condition.',199.99,'M','assets/images/tshirt.jpg',5,'available'),
 ('Oversized Hoodie','Adidas','Warm hoodie suitable for casual streetwear outfits.',399.99,'L','assets/images/hoodie.jpg',4,'available'),
 ('Blue Denim Jeans','Levi''s','Classic straight-leg jeans with a neat second-hand finish.',499.99,'32','assets/images/jeans.jpg',3,'available'),
 ('Black Jacket','Puma','Light jacket for cool weather and everyday wear.',799.99,'XL','assets/images/jacket.jpg',2,'available'),
-('White Sneakers','Converse','Clean pre-owned sneakers with comfortable soles.',999.99,'42','assets/images/sneakers.jpg',3,'available')
-");
-
-echo "All tables created successfully!";
-?>
+('White Sneakers','Converse','Clean pre-owned sneakers with comfortable soles.',999.99,'42','assets/images/sneakers.jpg',3,'available');

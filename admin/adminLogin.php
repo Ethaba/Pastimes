@@ -1,17 +1,27 @@
 <?php
 session_start();
+include("../config/DBConn.php");
 
 $error = "";
 
+if (isset($_SESSION['admin'])) {
+    header("Location: dashboard.php");
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = mysqli_real_escape_string($conn, trim($_POST['username']));
+    $password = md5($_POST['password']);
 
-    if ($_POST['username'] == "admin" && $_POST['password'] == "admin123") {
+    // Admin details are checked against tblAdmin so the login uses database records.
+    $result = $conn->query("SELECT * FROM tblAdmin WHERE username='$username' AND password='$password'");
 
-        $_SESSION['admin'] = true;
+    if ($result->num_rows > 0) {
+        $_SESSION['admin'] = $result->fetch_assoc();
         header("Location: dashboard.php");
-
+        exit();
     } else {
-        $error = "Invalid admin login";
+        $error = "Invalid admin login.";
     }
 }
 ?>
