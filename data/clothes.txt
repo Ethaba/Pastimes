@@ -1,0 +1,5 @@
+T-Shirt,199.99,M,
+Hoodie,399.99,L,
+Jeans,499.99,32,
+Jacket,799.99,XL
+Sneakers, 999.99,42

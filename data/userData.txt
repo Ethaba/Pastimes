@@ -1,0 +1,5 @@
+Ndumiso,Gumede,ndumiso2309@gmail.com,29ef52e7563626a96cea7f4b4085c124,approved
+Snqobile,Cele,SNQ1201@gmail.com,29ef52e7563626a96cea7f4b4085c124,pending
+Luyanda,Magubane,DOCMAN@gmail.com,29ef52e7563626a96cea7f4b4085c124,approved
+Bongumusa,Ngcobo,NgcoboOmkhulu@gmail.com,29ef52e7563626a96cea7f4b4085c124,pending
+Fortune,Mnguni,FoortuneM@gmail.com,29ef52e7563626a96cea7f4b4085c124,approved
