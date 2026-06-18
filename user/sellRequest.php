@@ -82,20 +82,30 @@ $requests = $conn->query("SELECT * FROM tblSellRequest WHERE user_id='$userId' O
 </div>
 </div>
 
-<h2 class="section-title">My Selling Requests</h2>
-<table>
-    <tr>
-        <th>Item</th>
-        <th>Brand</th>
-        <th>Status</th>
-        <th>Admin Note</th>
-    </tr>
-    <?php while ($request = $requests->fetch_assoc()) { ?>
-        <tr>
-            <td><?php echo htmlspecialchars($request['clothing_name']); ?></td>
-            <td><?php echo htmlspecialchars($request['brand']); ?></td>
-            <td><?php echo htmlspecialchars($request['request_status']); ?></td>
-            <td><?php echo htmlspecialchars($request['admin_note']); ?></td>
-        </tr>
-    <?php } ?>
-</table>
+<div class="requests-panel">
+    <div class="requests-panel-header">
+        <h2 class="section-title">My Selling Requests</h2>
+    </div>
+    <div class="requests-table-wrap">
+        <table class="requests-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Brand</th>
+                    <th>Status</th>
+                    <th>Admin Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($request = $requests->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($request['clothing_name']); ?></td>
+                        <td><?php echo htmlspecialchars($request['brand']); ?></td>
+                        <td><span class="status <?php echo htmlspecialchars($request['request_status']); ?>"><?php echo htmlspecialchars($request['request_status']); ?></span></td>
+                        <td><?php echo htmlspecialchars($request['admin_note'] ?: 'No note yet'); ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+</div>
