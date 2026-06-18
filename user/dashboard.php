@@ -102,6 +102,8 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
         $cartCount += $item['quantity'];
     }
 }
+// Note: The active shopping cart is stored in PHP session data.
+// The database is only used later during checkout when the cart is converted to orders.
 
 $categories = [
     [
@@ -302,11 +304,6 @@ $categories = [
     // Product data used by the dashboard modal and cart interactions.
     const dashboardProducts = <?php echo json_encode($dashboardProducts, JSON_HEX_TAG); ?>;
     let dashboardCartCount = <?php echo $cartCount ?: 0; ?>;
-    const storedCount = sessionStorage.getItem('dashboardCartCount');
-    if (storedCount !== null) {
-        dashboardCartCount = parseInt(storedCount, 10) || dashboardCartCount;
-    }
-
     const cartCountElement = document.getElementById('dashboard-cart-count');
     const toast = document.getElementById('dashboard-toast');
     const showMoreButton = document.getElementById('dashboard-show-more');
@@ -330,7 +327,6 @@ $categories = [
     function updateCartDisplay() {
         if (cartCountElement) {
             cartCountElement.textContent = dashboardCartCount;
-            sessionStorage.setItem('dashboardCartCount', dashboardCartCount);
         }
     }
 

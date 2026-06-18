@@ -39,6 +39,13 @@ if (isset($_GET['add'])) {
 
 $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, trim($_GET['search'])) : "";
 
+$cartCount = 0;
+if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $item) {
+        $cartCount += $item['quantity'];
+    }
+}
+
 if ($search != "") {
     $result = $conn->query("SELECT * FROM tblClothes
         WHERE status='available'
@@ -106,7 +113,7 @@ function resolveImageUrl($imagePath, $serverBaseDir, $urlPrefix = '') {
     <h3>Past Times</h3>
     <div>
         <a href="dashboard.php">Home</a>
-        <a href="cart.php">Show Cart</a>
+        <a class="cart-link" href="cart.php">Show Cart <span id="dashboard-cart-count"><?php echo $cartCount; ?></span></a>
         <a href="sellRequest.php">Sell</a>
         <a href="history.php">History</a>
         <a href="../auth/logout.php">Logout</a>
