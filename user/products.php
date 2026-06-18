@@ -19,6 +19,22 @@ if (isset($_GET['add'])) {
         $cart->AddItem($itemResult->fetch_assoc());
         $message = "Item added to cart.";
     }
+
+    if (isset($_GET['ajax'])) {
+        $cartCount = 0;
+        if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+            foreach ($_SESSION['cart'] as $item) {
+                $cartCount += $item['quantity'];
+            }
+        }
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => $itemResult->num_rows > 0,
+            'message' => $message,
+            'cartCount' => $cartCount
+        ]);
+        exit;
+    }
 }
 
 $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, trim($_GET['search'])) : "";
