@@ -45,15 +45,30 @@
 <?php
 include("config/DBConn.php");
 
-// Load products from database
+// Load products from database and preserve purchase totals for popularity badges
 $result = $conn->query("
-    SELECT * 
-    FROM tblClothes 
-    WHERE status='available' 
-    AND quantity > 0
-    ORDER BY cloth_id DESC
-    LIMIT 8
+    SELECT c.*, COALESCE((
+        SELECT SUM(quantity) FROM tblOrderLine ol WHERE ol.cloth_id = c.cloth_id
+    ), 0) AS total_sold
+    FROM tblClothes c
+    WHERE c.status='available' 
+    AND c.quantity > 0
+    ORDER BY c.cloth_id DESC
+    LIMIT 4
 ");
+
+$products = [];
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $products[] = $row;
+    }
+}
+
+usort($products, function($a, $b) {
+    return $b['total_sold'] <=> $a['total_sold'];
+});
+
+$popularIds = array_column(array_slice($products, 0, 2), 'cloth_id');
 
 function normalizeImagePath($imagePath) {
     $imagePath = trim(str_replace('\\', '/', $imagePath));
@@ -98,12 +113,15 @@ function resolveImageUrl($imagePath, $serverBaseDir, $urlPrefix = '') {
 
     <div class="products">
 
-<<<<<<< HEAD
-        <?php while ($row = $result->fetch_assoc()) { 
+        <?php foreach ($products as $row) {
             $safeImage = htmlspecialchars(resolveImageUrl($row['image'], __DIR__, ''));
+            $isPopular = in_array($row['cloth_id'], $popularIds);
         ?>
 
             <div class="product">
+                <?php if ($isPopular) { ?>
+                    <div class="product-badge">Popular</div>
+                <?php } ?>
 
                 <img 
                     src="<?php echo $safeImage; ?>" 
@@ -133,6 +151,9 @@ function resolveImageUrl($imagePath, $serverBaseDir, $urlPrefix = '') {
 
         <?php } ?>
 
+    </div>
+    <div class="action-row" style="text-align:center; margin-top: 20px;">
+        <a class="btn primary" href="user/products.php">Shop for more</a>
     </div>
 </div>
 
