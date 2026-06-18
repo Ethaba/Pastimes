@@ -116,7 +116,16 @@ $conn->query("INSERT INTO tblClothes (name,brand,description,price,size,image,qu
 ('Oversized Hoodie','Adidas','Warm hoodie suitable for casual streetwear outfits.',399.99,'L','images/AdidasH.jpg',4,'available'),
 ('Blue Denim Jeans','Levi''s','Classic straight-leg jeans with a neat second-hand finish.',499.99,'32','images/LevisJean.jpg',3,'available'),
 ('Black Jacket','Puma','Light jacket for cool weather and everyday wear.',799.99,'XL','images/PumaJacket.jpg',2,'available'),
-('White Sneakers','Converse','Clean pre-owned sneakers with comfortable soles.',999.99,'42','images/ChuckTaylor.jpg',3,'available')
+('White Sneakers','Converse','Clean pre-owned sneakers with comfortable soles.',999.99,'42','images/ChuckTaylor.jpg',3,'available'),
+('Summit Jacket','The North Face','Technical outerwear designed for cold weather.',1899.99,'M,L,XL','images/NorthFaceSummit.jpg',9,'available'),
+('Distressed Jeans','Amiri','High-end denim with a modern distressed finish.',1499.99,'S,M,L,XL','images/AmiriJeans.jpg',7,'available'),
+('Silk Statement Shirt','Gucci','Luxury silk shirt with a bold pattern and fine cut.',2499.00,'XS,S,M,L','images/GucciShirt.jpg',8,'available'),
+('Monogram Vest','Louis Vuitton','Premium monogram vest with elegant detailing.',2899.99,'S,M,L','images/LVVest.jpg',6,'available'),
+('High-Top Sneakers','Giuseppe Zanotti','Designer sneakers with metallic accents and premium stitching.',2399.99,'8,9,10,11','images/ZanottiSneakers.jpg',5,'available'),
+('Vintage Suit','Ermenegildo Zegna','Tailored Italian suit with a classic vintage cut.',2999.00,'M,L,XL','images/ZegnaSuit.jpg',4,'available'),
+('Leather Trench','Ermenglio Zignalli','Statement leather trench coat with dramatic style.',2199.99,'M,L','images/ZignalliTrench.jpg',2,'available'),
+('Satin Slip Dress','Valli','Elegant evening dress with a silky sheen.',1799.00,'XS,S,M','images/ValliDress.jpg',10,'available'),
+('Classic White Tee','Everyday','A clean, premium cotton t-shirt for every wardrobe.',249.99,'S,M,L,XL,XXL','images/WhiteTee.jpg',15,'available')
 ");
 
 echo "All tables created successfully!";

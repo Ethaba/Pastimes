@@ -27,7 +27,7 @@
     <div class="grid">
         <div class="card">
             <h3>Streetwear</h3>
-            <p>Nike, Adidas, Supreme, Off-White styles</p>
+            <p>Nike, Adidas, Supreme, Off-White styles, Assics, The North Face, </p>
         </div>
 
         <div class="card">
@@ -45,30 +45,31 @@
 <?php
 include("config/DBConn.php");
 
-// Load products from database and preserve purchase totals for popularity badges
-$result = $conn->query("
-    SELECT c.*, COALESCE((
-        SELECT SUM(quantity) FROM tblOrderLine ol WHERE ol.cloth_id = c.cloth_id
-    ), 0) AS total_sold
+
+$allResult = $conn->query("
+    SELECT c.*, COALESCE(SUM(ol.quantity), 0) AS total_sold
     FROM tblClothes c
-    WHERE c.status='available' 
+    LEFT JOIN tblOrderLine ol ON ol.cloth_id = c.cloth_id
+    WHERE c.status='available'
     AND c.quantity > 0
+    GROUP BY c.cloth_id
     ORDER BY c.cloth_id DESC
-    LIMIT 4
 ");
 
-$products = [];
-if ($result) {
-    while ($row = $result->fetch_assoc()) {
-        $products[] = $row;
+$allProducts = [];
+if ($allResult) {
+    while ($row = $allResult->fetch_assoc()) {
+        $allProducts[] = $row;
     }
 }
 
-usort($products, function($a, $b) {
+$popularProducts = $allProducts;
+usort($popularProducts, function($a, $b) {
     return $b['total_sold'] <=> $a['total_sold'];
 });
+$popularIds = array_column(array_slice($popularProducts, 0, 2), 'cloth_id');
 
-$popularIds = array_column(array_slice($products, 0, 2), 'cloth_id');
+$products = array_slice($allProducts, 0, 4);
 
 function normalizeImagePath($imagePath) {
     $imagePath = trim(str_replace('\\', '/', $imagePath));
@@ -120,7 +121,10 @@ function resolveImageUrl($imagePath, $serverBaseDir, $urlPrefix = '') {
 
             <div class="product">
                 <?php if ($isPopular) { ?>
-                    <div class="product-badge">Popular</div>
+                    <div class="product-badge popular">Popular</div>
+                <?php } ?>
+                <?php if ($row['quantity'] < 5) { ?>
+                    <div class="product-badge limited">Limited Stock</div>
                 <?php } ?>
 
                 <img 
