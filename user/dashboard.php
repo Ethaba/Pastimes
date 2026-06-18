@@ -10,7 +10,20 @@ include("../config/DBConn.php");
 
 $user = $_SESSION['user'];
 
-$latestProducts = $conn->query("SELECT * FROM tblClothes WHERE status='available' AND quantity > 0 ORDER BY cloth_id DESC LIMIT 4");
+$latestProductsResult = $conn->query("SELECT c.*, COALESCE((SELECT SUM(quantity) FROM tblOrderLine ol WHERE ol.cloth_id = c.cloth_id), 0) AS total_sold FROM tblClothes c WHERE status='available' AND quantity > 0 ORDER BY cloth_id DESC LIMIT 4");
+
+$latestProducts = [];
+if ($latestProductsResult) {
+    while ($row = $latestProductsResult->fetch_assoc()) {
+        $latestProducts[] = $row;
+    }
+}
+
+$popularProducts = $latestProducts;
+usort($popularProducts, function($a, $b) {
+    return $b['total_sold'] <=> $a['total_sold'];
+});
+$popularIds = array_column(array_slice($popularProducts, 0, 2), 'cloth_id');
 
 $categories = [
     [
@@ -75,10 +88,15 @@ $categories = [
 
 <div class="section section--compact">
     <h2>Latest arrivals</h2>
-    <?php if ($latestProducts && $latestProducts->num_rows > 0) { ?>
+    <?php if (!empty($latestProducts)) { ?>
         <div class="products">
-            <?php while ($row = $latestProducts->fetch_assoc()) { ?>
+            <?php foreach ($latestProducts as $row) {
+                $isPopular = in_array($row['cloth_id'], $popularIds);
+            ?>
                 <div class="product product--dashboard">
+                    <?php if ($isPopular) { ?>
+                        <div class="product-badge">Popular</div>
+                    <?php } ?>
                     <img src="../<?php echo htmlspecialchars($row['image']); ?>" alt="<?php echo htmlspecialchars($row['name']); ?>" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="image-placeholder">Image coming soon</div>
                     <div class="product-details">
@@ -93,6 +111,9 @@ $categories = [
                     <a class="button-link" href="products.php?add=<?php echo $row['cloth_id']; ?>">Add to Cart</a>
                 </div>
             <?php } ?>
+        </div>
+        <div class="action-row" style="text-align:center; margin-top: 20px;">
+            <a class="button-link" href="products.php">Shop for more</a>
         </div>
     <?php } else { ?>
         <p class="info-text">No products are available right now. Check back soon or add a request to sell.</p>
