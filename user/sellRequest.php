@@ -16,15 +16,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = mysqli_real_escape_string($conn, trim($_POST['description']));
     $imagePath = "";
 
-    // The uploaded image is saved in assets/images and the path is stored in the database.
-    if (isset($_FILES['image']) && $_FILES['image']['name'] != "") {
-        $imageName = time() . "_" . basename($_FILES['image']['name']);
-        $targetPath = "../assets/images/" . $imageName;
+    // Upload image correctly into /images folder (project root)
+if (isset($_FILES['image']) && $_FILES['image']['name'] != "") {
 
-        if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
-            $imagePath = "assets/images/" . $imageName;
-        }
+    $imageName = time() . "_" . basename($_FILES['image']['name']);
+
+    // correct folder (NOT assets)
+    $targetPath = "../images/" . $imageName;
+
+    // ensure folder exists (safe)
+    if (!file_exists("../images")) {
+        mkdir("../images", 0777, true);
     }
+
+    if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
+        // store DB path
+        $imagePath = "images/" . $imageName;
+    } else {
+        $imagePath = ""; // fallback if upload fails
+    }
+}
 
     $conn->query("INSERT INTO tblSellRequest (user_id, clothing_name, brand, description, image, request_status, request_date)
         VALUES ('$userId', '$name', '$brand', '$description', '$imagePath', 'pending', NOW())");

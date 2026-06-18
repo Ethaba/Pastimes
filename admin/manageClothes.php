@@ -1,6 +1,7 @@
 <?php
 session_start();
 include("../config/DBConn.php");
+include("includes/adminLayout.php");
 
 function normalizeImagePath($imagePath) {
     $imagePath = trim(str_replace('\\', '/', $imagePath));
@@ -78,83 +79,117 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $clothes = $conn->query("SELECT * FROM tblClothes ORDER BY cloth_id DESC");
 ?>
 
-<link rel="stylesheet" href="../assets/styles.css">
 
-<div class="navbar">
-    <h3>Admin Panel</h3>
-    <div>
-        <a href="dashboard.php">Dashboard</a>
-        <a href="manageUsers.php">Users</a>
-        <a href="sellRequests.php">Seller Requests</a>
-        <a href="../auth/logout.php">Logout</a>
+<div class="page-wrapper">
+    <div class="page-header">
+        <div>
+            <h1>Manage Clothing Inventory</h1>
+            <p>Quickly add, update, or remove items from the catalog with a clean admin management view.</p>
+        </div>
+    </div>
+
+    <?php if ($message) { ?>
+        <div class="success message-bar"><?php echo htmlspecialchars($message); ?></div>
+    <?php } ?>
+
+    <div class="card panel wide-card">
+        <h2><?php echo $editItem ? "Edit Clothing Item" : "Add Clothing Item"; ?></h2>
+
+        <form method="POST">
+            <input type="hidden" name="cloth_id" value="<?php echo $editItem ? $editItem['cloth_id'] : ''; ?>">
+
+            <div class="form-grid">
+                <div>
+                    <label>Name</label>
+                    <input type="text" name="name" required value="<?php echo $editItem ? htmlspecialchars($editItem['name']) : ''; ?>">
+                </div>
+
+                <div>
+                    <label>Brand</label>
+                    <input type="text" name="brand" required value="<?php echo $editItem ? htmlspecialchars($editItem['brand']) : ''; ?>">
+                </div>
+
+                <div class="full-width">
+                    <label>Description</label>
+                    <textarea name="description" required><?php echo $editItem ? htmlspecialchars($editItem['description']) : ''; ?></textarea>
+                </div>
+
+                <div>
+                    <label>Price</label>
+                    <input type="number" name="price" step="0.01" required value="<?php echo $editItem ? $editItem['price'] : ''; ?>">
+                </div>
+
+                <div>
+                    <label>Size</label>
+                    <input type="text" name="size" required value="<?php echo $editItem ? htmlspecialchars($editItem['size']) : ''; ?>">
+                </div>
+
+                <div>
+                    <label>Image Path</label>
+                    <input type="text" name="image" required value="<?php echo $editItem ? htmlspecialchars($editItem['image']) : 'images/OIP.webp'; ?>">
+                    <small>Use a filename like <code>JF2454_21_model.avif</code> or a path like <code>images/your-image.avif</code>.</small>
+                </div>
+
+                <div>
+                    <label>Quantity</label>
+                    <input type="number" name="quantity" min="0" required value="<?php echo $editItem ? $editItem['quantity'] : '1'; ?>">
+                </div>
+
+                <div>
+                    <label>Status</label>
+                    <select name="status">
+                        <option value="available" <?php echo $editItem && $editItem['status'] == 'available' ? 'selected' : ''; ?>>available</option>
+                        <option value="sold" <?php echo $editItem && $editItem['status'] == 'sold' ? 'selected' : ''; ?>>sold</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit"><?php echo $editItem ? "Update Clothing" : "Add Clothing"; ?></button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <div class="panel-header">
+            <div>
+                <h2>Clothing Items</h2>
+                <p class="info-text"><?php echo $clothes->num_rows; ?> items currently in inventory.</p>
+            </div>
+        </div>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Brand</th>
+                    <th>Price</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php while ($row = $clothes->fetch_assoc()) { ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($row['name']); ?></td>
+                    <td><?php echo htmlspecialchars($row['brand']); ?></td>
+                    <td>R<?php echo number_format($row['price'], 2); ?></td>
+                    <td><?php echo htmlspecialchars($row['size']); ?></td>
+                    <td><?php echo $row['quantity']; ?></td>
+                    <td>
+                        <span class="badge <?php echo $row['status'] == 'available' ? 'available' : 'sold'; ?>">
+                            <?php echo htmlspecialchars($row['status']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <a class="btn small btn-edit" href="manageClothes.php?edit=<?php echo $row['cloth_id']; ?>">Edit</a>
+                        <a class="btn small btn-delete" href="manageClothes.php?delete=<?php echo $row['cloth_id']; ?>" onclick="return confirm('Delete this clothing item?');">Delete</a>
+                    </td>
+                </tr>
+            <?php } ?>
+            </tbody>
+        </table>
     </div>
 </div>
 
-<div class="container">
-<div class="card wide-card">
-    <h2><?php echo $editItem ? "Edit Clothing" : "Add Clothing"; ?></h2>
-    <p class="success"><?php echo $message; ?></p>
-
-    <form method="POST">
-        <input type="hidden" name="cloth_id" value="<?php echo $editItem ? $editItem['cloth_id'] : ''; ?>">
-
-        <label>Name</label>
-        <input type="text" name="name" required value="<?php echo $editItem ? htmlspecialchars($editItem['name']) : ''; ?>">
-
-        <label>Brand</label>
-        <input type="text" name="brand" required value="<?php echo $editItem ? htmlspecialchars($editItem['brand']) : ''; ?>">
-
-        <label>Description</label>
-        <textarea name="description" required><?php echo $editItem ? htmlspecialchars($editItem['description']) : ''; ?></textarea>
-
-        <label>Price</label>
-        <input type="number" name="price" step="0.01" required value="<?php echo $editItem ? $editItem['price'] : ''; ?>">
-
-        <label>Size</label>
-        <input type="text" name="size" required value="<?php echo $editItem ? htmlspecialchars($editItem['size']) : ''; ?>">
-
-        <label>Image Path</label>
-        <input type="text" name="image" required value="<?php echo $editItem ? htmlspecialchars($editItem['image']) : 'images/OIP.webp'; ?>">
-        <small>Use a filename like <code>JF2454_21_model.avif</code> or a path like <code>images/your-image.avif</code>.</small>
-
-        <label>Quantity</label>
-        <input type="number" name="quantity" min="0" required value="<?php echo $editItem ? $editItem['quantity'] : '1'; ?>">
-
-        <label>Status</label>
-        <select name="status">
-            <option value="available" <?php echo $editItem && $editItem['status'] == 'available' ? 'selected' : ''; ?>>available</option>
-            <option value="sold" <?php echo $editItem && $editItem['status'] == 'sold' ? 'selected' : ''; ?>>sold</option>
-        </select>
-
-        <button type="submit"><?php echo $editItem ? "Update Clothing" : "Add Clothing"; ?></button>
-    </form>
-</div>
-</div>
-
-<h2 class="section-title">Clothing Items</h2>
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Brand</th>
-        <th>Price</th>
-        <th>Size</th>
-        <th>Quantity</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
-    <?php while ($row = $clothes->fetch_assoc()) { ?>
-        <tr>
-            <td><?php echo htmlspecialchars($row['name']); ?></td>
-            <td><?php echo htmlspecialchars($row['brand']); ?></td>
-            <td>R<?php echo number_format($row['price'], 2); ?></td>
-            <td><?php echo htmlspecialchars($row['size']); ?></td>
-            <td><?php echo $row['quantity']; ?></td>
-            <td><?php echo htmlspecialchars($row['status']); ?></td>
-            <td>
-                <a href="manageClothes.php?edit=<?php echo $row['cloth_id']; ?>">Edit</a>
-                |
-                <a href="manageClothes.php?delete=<?php echo $row['cloth_id']; ?>">Delete</a>
-            </td>
-        </tr>
-    <?php } ?>
-</table>
+<?php include("includes/adminFooter.php"); ?>

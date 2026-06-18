@@ -9,9 +9,27 @@ if (!isset($_SESSION['admin'])) {
 
 $id = mysqli_real_escape_string($conn, $_GET['id']);
 
-// Approving a user changes the pending status to approved so the user can log in.
-$conn->query("UPDATE tblUser SET status='approved' WHERE user_id='$id'");
+// Default action = approve (keeps your current system working)
+$action = isset($_GET['action']) ? $_GET['action'] : 'approve';
 
+if ($action == "approve") {
+
+    $conn->query("
+        UPDATE tblUser 
+        SET status='approved' 
+        WHERE user_id='$id'
+    ");
+
+} elseif ($action == "reject") {
+
+    $conn->query("
+        UPDATE tblUser 
+        SET status='rejected' 
+        WHERE user_id='$id'
+    ");
+}
+
+// return back to dashboard after action
 header("Location: dashboard.php");
 exit();
 ?>

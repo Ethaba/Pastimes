@@ -1,6 +1,7 @@
 <?php
 session_start();
 include("../config/DBConn.php");
+include("includes/adminLayout.php");
 
 if (!isset($_SESSION['admin'])) {
     header("Location: adminLogin.php");
@@ -31,63 +32,73 @@ if ($setupReady) {
 }
 ?>
 
-<link rel="stylesheet" href="../assets/styles.css">
 
-<div class="navbar">
-    <h3>Admin Panel</h3>
-    <div>
-        <a href="dashboard.php">Dashboard</a>
-        <a href="manageClothes.php">Clothes</a>
-        <a href="manageUsers.php">Users</a>
-        <a href="sellRequests.php">Seller Requests</a>
-        <a href="messages.php">Messages</a>
-        <a href="../auth/logout.php">Logout</a>
-    </div>
+        <div class="admin-topbar">
+            <div>
+                <h1>Dashboard Overview</h1>
+                <p>Manage platform activity and approvals</p>
+            </div>
+        </div>
+
+        <?php if (!$setupReady) { ?>
+            <div class="warning-box">
+                <p><?php echo $setupMessage; ?></p>
+                <a class="btn primary" href="../scripts/CreateTable.php">Create Tables</a>
+            </div>
+        <?php } else { ?>
+
+        <!-- STATS -->
+        <section class="stats">
+            <div class="stat">
+                <h2><?php echo $clothingCount['total']; ?></h2>
+                <p>Total Clothing</p>
+            </div>
+
+            <div class="stat">
+                <h2><?php echo $requestCount['total']; ?></h2>
+                <p>Pending Requests</p>
+            </div>
+        </section>
+
+        <!-- USERS TABLE -->
+        <section class="panel">
+            <h2>Pending Users</h2>
+
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <?php while ($row = $pendingUsers->fetch_assoc()) { ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['fname'] . " " . $row['lname']); ?></td>
+                            <td><?php echo htmlspecialchars($row['username']); ?></td>
+                            <td><?php echo htmlspecialchars($row['email']); ?></td>
+                            <td><?php echo htmlspecialchars($row['address']); ?></td>
+                            <td>
+                                <a class="button-link table-button button-approve" href="verifyUsers.php?id=<?php echo $row['user_id']; ?>&action=approve">
+                                Approve
+                                </a>
+                                <a class="button-link table-button button-reject" href="verifyUsers.php?id=<?php echo $row['user_id']; ?>&action=reject" onclick="return confirm('Reject this user?');">
+                                Reject
+                                </a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+
+        </section>
+
+        <?php } ?>
+
+    </main>
 </div>
-
-<div class="page-header">
-    <h1>Administrator Dashboard</h1>
-    <p>Approve users, manage clothing records, review seller requests, and communicate about orders.</p>
-</div>
-
-<?php if (!$setupReady) { ?>
-    <div class="setup-warning">
-        <p><?php echo $setupMessage; ?></p>
-        <a class="button-link" href="../scripts/CreateTable.php">Create Part 3 Tables</a>
-    </div>
-<?php } else { ?>
-
-<div class="stats-grid">
-    <div class="stat-box">
-        <strong><?php echo $clothingCount['total']; ?></strong>
-        <span>Clothing Items</span>
-    </div>
-    <div class="stat-box">
-        <strong><?php echo $requestCount['total']; ?></strong>
-        <span>Pending Seller Requests</span>
-    </div>
-</div>
-
-<h2 class="section-title">Pending Users</h2>
-
-<table>
-<tr>
-    <th>Name</th>
-    <th>Username</th>
-    <th>Email</th>
-    <th>Address</th>
-    <th>Action</th>
-</tr>
-
-<?php while ($row = $pendingUsers->fetch_assoc()) { ?>
-    <tr>
-        <td><?php echo htmlspecialchars($row['fname'] . " " . $row['lname']); ?></td>
-        <td><?php echo htmlspecialchars($row['username']); ?></td>
-        <td><?php echo htmlspecialchars($row['email']); ?></td>
-        <td><?php echo htmlspecialchars($row['address']); ?></td>
-        <td><a class="button-link table-button" href="verifyUsers.php?id=<?php echo $row['user_id']; ?>">Approve</a></td>
-    </tr>
-<?php } ?>
-</table>
-
-<?php } ?>
+<?php include("includes/adminFooter.php"); ?>

@@ -715,8 +715,16 @@ input, textarea, select {
     width: 100%;
     padding: 10px;
     margin: 8px 0 15px;
-    border: 1px solid #ddd;
+    border: 1px solid #999;
     border-radius: 6px;
+    background: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #333;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
 button {
@@ -733,6 +741,20 @@ button:hover {
     color: #000;
 }
 
+.request-form {
+    display: grid;
+    gap: 10px;
+}
+
+.request-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.request-form button {
+    justify-self: flex-start;
+}
+
 /* =========================
    UTILITIES
 ========================= */
@@ -746,3 +768,603 @@ button:hover {
     color: red;
     text-align: center;
 }
+
+
+/* ===== SELL REQUEST STATUS BADGES ===== */
+
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    text-transform: capitalize;
+}
+
+.status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status.approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status.rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+
+/* ===== ADMIN DASHBOARD ===== */
+
+
+
+.admin-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 220px;
+    background: #111;
+    color: white;
+    padding: 20px;
+}
+
+.admin-sidebar h2 {
+    color: gold;
+    margin-bottom: 20px;
+}
+
+.admin-sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px 0;
+}
+
+.admin-sidebar a:hover {
+    color: gold;
+}
+
+.admin-main {
+    flex: 1;
+    padding: 30px;
+    background: #f4f4f4;
+}
+
+.admin-header h1 {
+    margin-bottom: 5px;
+}
+
+.stats-grid {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    flex: 1;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.stat-card h2 {
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.panel {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.admin-table th {
+    background: black;
+    color: gold;
+    padding: 10px;
+}
+
+.admin-table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.warning-box {
+    background: #fff3cd;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+
+/* ===== ADMIN LAYOUT ===== */
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== SIDEBAR ===== */
+.admin-sidebar {
+    width: 250px;
+    background: linear-gradient(180deg, #0f0f0f, #1a1a1a);
+    color: white;
+    padding: 20px;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+}
+
+.brand h2 {
+    color: #ffd700;
+    margin-bottom: 5px;
+}
+
+.brand span {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.admin-nav {
+    margin-top: 30px;
+}
+
+.admin-nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    color: #ddd;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    transition: all 0.2s ease;
+}
+
+.admin-nav a:hover {
+    background: rgba(255, 215, 0, 0.08);
+    color: #ffd700;
+    transform: translateX(4px);
+}
+
+/* ===== MAIN ===== */
+.admin-main {
+    flex: 1;
+    padding: 30px;
+    background: #f6f7fb;
+}
+
+.admin-main {
+    flex: 1;
+    padding: 30px;
+    background: linear-gradient(180deg, #f6f7fb, #f1f3f8);
+}
+
+/* ===== TOPBAR ===== */
+.admin-topbar h1 {
+    margin: 0;
+}
+
+.admin-topbar p {
+    color: #666;
+    margin-top: 5px;
+}
+
+/* ===== STATS ===== */
+.stats {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.stat {
+    flex: 1;
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    text-align: center;
+    transition: 0.3s;
+}
+
+.stat:hover {
+    transform: translateY(-4px);
+}
+
+.stat h2 {
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+/* ===== PANEL ===== */
+.panel {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    margin-top: 20px;
+}
+
+/* ===== TABLE (FIXED + PROFESSIONAL) ===== */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+    border: 1px solid #e5e5e5; /* outer border */
+}
+
+/* HEADER */
+.admin-table thead {
+    background: #111;
+    color: #ffd700;
+}
+
+/* CELLS */
+.admin-table th,
+.admin-table td {
+    padding: 12px;
+    text-align: left;
+
+    /* ✅ VERTICAL + HORIZONTAL GRID LINES */
+    border-right: 1px solid #cccbcb;
+    border-bottom: 1px solid #cccbcb;
+}
+
+/* REMOVE LAST COLUMN BORDER */
+.admin-table th:last-child,
+.admin-table td:last-child {
+    border-right: none;
+}
+
+/* REMOVE LAST ROW BORDER */
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ROW HOVER */
+.admin-table tbody tr:hover {
+    background: #f5f7fb;
+}
+
+.button-link.table-button {
+    padding: 6px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 12px;
+    margin-right: 5px;
+    display: inline-block;
+    color: white;
+}
+
+/* GREEN APPROVE */
+.button-approve {
+    background: #28a745;
+}
+
+.page-wrapper {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 22px;
+}
+
+.page-header h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    color: #111;
+}
+
+.page-header p {
+    color: #555;
+    line-height: 1.6;
+    max-width: 780px;
+}
+
+.message-bar {
+    background: #e8f7ef;
+    border: 1px solid #c7e3d1;
+    color: #155724;
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+.form-grid label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-grid small {
+    display: block;
+    margin-top: -8px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #666;
+}
+
+.card.panel.wide-card {
+    max-width: 100%;
+    margin-bottom: 26px;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-end;
+    margin-bottom: 18px;
+}
+
+.panel-header--split {
+    align-items: center;
+}
+
+.stat-group {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.stat-card--mini {
+    padding: 14px 18px;
+    background: #f8f9ff;
+    border: 1px solid #dde0e7;
+    border-radius: 12px;
+    min-width: 150px;
+    text-align: left;
+}
+
+.stat-card--mini span {
+    display: inline-block;
+    white-space: nowrap;
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.stat-card--mini strong {
+    display: block;
+    font-size: 28px;
+    color: #111;
+}
+
+.message-list {
+    display: grid;
+    gap: 18px;
+}
+
+.message-card {
+    background: white;
+    padding: 22px;
+    border-radius: 18px;
+    box-shadow: 0 14px 40px rgba(17, 24, 39, 0.06);
+    border: 1px solid rgba(226, 232, 240, 0.76);
+}
+
+.message-card__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.message-user {
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 4px;
+}
+
+.message-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.message-badge.admin {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.message-badge.user {
+    background: #cff4fc;
+    color: #055160;
+}
+
+.message-date {
+    color: #65748b;
+    font-size: 13px;
+}
+
+.message-card h3 {
+    font-size: 18px;
+    color: #111;
+    margin-bottom: 12px;
+}
+
+.message-card p {
+    color: #475569;
+    line-height: 1.75;
+}
+
+.empty-state {
+    padding: 22px;
+    border-radius: 14px;
+    background: #fff8e6;
+    color: #6b4700;
+    border: 1px solid #f8e3b4;
+}
+
+.admin-table {
+    width: 100%;
+}
+
+.admin-table td .badge,
+.admin-table th .badge {
+    min-width: 90px;
+}
+
+.badge.available {
+    background: #28a745;
+}
+
+.badge.sold {
+    background: #dc3545;
+}
+
+.btn.small.btn-edit {
+    margin-right: 8px;
+}
+
+.button-approve:hover {
+    background: #218838;
+}
+
+/* RED REJECT */
+.button-reject {
+    background: #dc3545;
+}
+
+.button-reject:hover {
+    background: #c82333;
+}
+
+
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: white;
+}
+
+.badge.approved {
+    background: #28a745;
+}
+
+.badge.rejected {
+    background: #dc3545;
+}
+
+.badge.pending {
+    background: #ffc107;
+    color: black;
+}
+
+.btn.small {
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 12px;
+    margin-right: 5px;
+    display: inline-block;
+    color: white;
+}
+
+/* EDIT */
+.btn-edit {
+    background: #007bff;
+}
+
+.btn-edit:hover {
+    background: #0069d9;
+}
+
+/* DELETE */
+.btn-delete {
+    background: #dc3545;
+}
+
+.btn-delete:hover {
+    background: #c82333;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* HEADER */
+table th {
+    background: #111;
+    color: #ffd700;
+    padding: 12px;
+    text-align: left;
+}
+
+/* CELLS */
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #cccbcb;
+    border-right: 1px solid #cccbcb;  /* vertical lines */
+}
+
+/* remove last column border */
+table td:last-child,
+table th:last-child {
+    border-right: none;
+}
+
+/* hover */
+table tr:hover {
+    background: #f9f9f9;
+}
+
+
+.page-wrapper {
+    width: 90%;
+    margin: 30px auto;
+}
+
+.page-header {
+    margin-bottom: 20px;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #111;
+}
+
+.page-header p {
+    margin-top: 5px;
+    color: #666;
+}
+
+
+
+
+
