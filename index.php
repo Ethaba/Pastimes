@@ -128,9 +128,9 @@ function resolveImageUrl($imagePath, $serverBaseDir, $urlPrefix = '') {
                 <?php } ?>
 
                 <img 
+                    class="product-image"
                     src="<?php echo $safeImage; ?>" 
                     alt="<?php echo htmlspecialchars($row['name']); ?>"
-                    style="width:100%; border-radius:8px;"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
                 <div class="image-placeholder">Image coming soon</div>
