@@ -111,12 +111,12 @@ $conn->query("INSERT INTO tblAdmin (username,password) VALUES
 ('Ndumiso', md5('Ndumiso2309'))
 ");
 
-$conn->query("INSERT INTO tblClothes (name,brand,description,price,size,image,quantity,status) VALUES
-('Vintage T-Shirt','Nike','Soft second-hand branded shirt in good condition.',199.99,'M','assets/images/tshirt.jpg',5,'available'),
-('Oversized Hoodie','Adidas','Warm hoodie suitable for casual streetwear outfits.',399.99,'L','assets/images/hoodie.jpg',4,'available'),
-('Blue Denim Jeans','Levi''s','Classic straight-leg jeans with a neat second-hand finish.',499.99,'32','assets/images/jeans.jpg',3,'available'),
-('Black Jacket','Puma','Light jacket for cool weather and everyday wear.',799.99,'XL','assets/images/jacket.jpg',2,'available'),
-('White Sneakers','Converse','Clean pre-owned sneakers with comfortable soles.',999.99,'42','assets/images/sneakers.jpg',3,'available')
+$$conn->query("INSERT INTO tblClothes (name,brand,description,price,size,image,quantity,status) VALUES
+('Vintage T-Shirt','Nike','Soft second-hand branded shirt in good condition.',199.99,'M','images/Nike.jpg',5,'available'),
+('Oversized Hoodie','Adidas','Warm hoodie suitable for casual streetwear outfits.',399.99,'L','images/AdidasH.jpg',4,'available'),
+('Blue Denim Jeans','Levi''s','Classic straight-leg jeans with a neat second-hand finish.',499.99,'32','images/LevisJean.jpg',3,'available'),
+('Black Jacket','Puma','Light jacket for cool weather and everyday wear.',799.99,'XL','images/PumaJacket.jpg',2,'available'),
+('White Sneakers','Converse','Clean pre-owned sneakers with comfortable soles.',999.99,'42','images/ChuckTaylor.jpg',3,'available')
 ");
 
 echo "All tables created successfully!";
