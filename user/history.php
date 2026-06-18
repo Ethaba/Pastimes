@@ -11,6 +11,14 @@ $userId = $_SESSION['user']['user_id'];
 
 // This report shows previous purchases and calculates the totals from the order lines.
 $orders = $conn->query("SELECT * FROM tblAorder WHERE user_id='$userId' ORDER BY order_date DESC");
+$orderRows = [];
+$grandTotal = 0;
+if ($orders && $orders->num_rows > 0) {
+    while ($row = $orders->fetch_assoc()) {
+        $orderRows[] = $row;
+        $grandTotal += $row['total_amount'];
+    }
+}
 ?>
 
 <link rel="stylesheet" href="../assets/styles.css">
@@ -33,7 +41,7 @@ $orders = $conn->query("SELECT * FROM tblAorder WHERE user_id='$userId' ORDER BY
     <p class="notice">No purchases have been made yet.</p>
 <?php } ?>
 
-<?php while ($order = $orders->fetch_assoc()) { ?>
+<?php foreach ($orderRows as $order) { ?>
     <div class="report-card">
         <h3>Reference: <?php echo htmlspecialchars($order['reference_number']); ?></h3>
         <p>Date: <?php echo htmlspecialchars($order['order_date']); ?></p>
@@ -67,5 +75,11 @@ $orders = $conn->query("SELECT * FROM tblAorder WHERE user_id='$userId' ORDER BY
         </table>
 
         <p class="cart-summary">Order Total: R<?php echo number_format($order['total_amount'], 2); ?></p>
+    </div>
+<?php } ?>
+
+<?php if (count($orderRows) > 0) { ?>
+    <div class="cart-summary" style="text-align:center; margin: 20px auto; max-width: 95%; font-size: 1.1rem;">
+        Total of all purchases: R<?php echo number_format($grandTotal, 2); ?>
     </div>
 <?php } ?>

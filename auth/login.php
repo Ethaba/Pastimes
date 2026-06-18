@@ -5,6 +5,13 @@ include("../config/DBConn.php");
 $email = "";
 $username = "";
 $error = "";
+$success = "";
+
+if (isset($_GET['checkout']) && $_GET['checkout'] === 'complete') {
+    $reference = isset($_GET['ref']) ? $_GET['ref'] : '';
+    $sessionId = isset($_GET['sid']) ? $_GET['sid'] : '';
+    $success = "Checkout complete. Reference number: " . htmlspecialchars($reference) . ". Session ID: " . htmlspecialchars($sessionId) . ".";
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = mysqli_real_escape_string($conn, trim($_POST['username']));
@@ -53,6 +60,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <input type="password" name="password" required>
 
     <button type="submit">Login</button>
+
+    <?php if ($success != "") { ?>
+        <p class="success"><?php echo $success; ?></p>
+    <?php } ?>
 
     <p class="error"><?php echo $error; ?></p>
 

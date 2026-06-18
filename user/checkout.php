@@ -24,16 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Please enter a delivery address.";
     } else {
         $referenceNumber = $cart->Checkout($conn, $user['user_id'], $deliveryAddress);
-        $message = "Checkout complete. Your reference number is " . $referenceNumber . ".";
-    }
-}
-?>
-
-<link rel="stylesheet" href="../assets/styles.css">
-
-<div class="navbar">
-    <h3>Past Times</h3>
-    <div>
+            $sessionId = session_id();
+            session_unset();
+            session_destroy();
+            header("Location: ../auth/login.php?checkout=complete&ref=" . urlencode($referenceNumber) . "&sid=" . urlencode($sessionId));
+            exit();
         <a href="cart.php">Cart</a>
         <a href="products.php">Shop</a>
         <a href="history.php">History</a>

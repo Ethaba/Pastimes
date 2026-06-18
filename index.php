@@ -12,13 +12,57 @@
 </div>
 
 <div class="hero">
-    <h1>Discover Second-Hand Fashion</h1>
-    <p>Buy and sell premium pre-owned clothing from top brands at affordable prices.</p>
+    <h1>Pastimes Second-Hand Fashion eShop</h1>
+    <p>Our goal is to deliver safe, stylish pre-owned clothing with fast checkout, reliable inventory, and admin-managed stock control.</p>
 
     <div style="margin-top:20px;">
-        <a class="btn primary" href="auth/login.php">Start Shopping</a>
-        <a class="btn secondary" href="auth/register.php">Create Account</a>
+        <a class="btn primary" href="user/products.php">eShop</a>
+        <a class="btn secondary" href="user/cart.php">Show Cart</a>
     </div>
+</div>
+
+<div class="section">
+    <h2>eShop Goals</h2>
+    <ul class="goal-list">
+        <li>Present the eShop type and goals clearly on the startup page with styled CSS.</li>
+        <li>Give users direct access to the Items table, AddToCart, and ShowCart features.</li>
+        <li>Keep the visible product catalog limited to the approved items only.</li>
+        <li>Ensure admin login is required for admin pages and user cart data stays intact while shopping.</li>
+    </ul>
+</div>
+
+<div class="section">
+    <div class="section-header">
+        <h2>Startup Items Table</h2>
+        <a class="button-link" href="user/cart.php">Show Cart</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Picture</th>
+                <th>Item</th>
+                <th>Brand</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($products as $row) {
+                $safeImage = htmlspecialchars(resolveImageUrl($row['image'], __DIR__, ''));
+            ?>
+                <tr>
+                    <td><img class="table-product-image" src="<?php echo $safeImage; ?>" alt="<?php echo htmlspecialchars($row['name']); ?>" onerror="this.style.display='none'"></td>
+                    <td><?php echo htmlspecialchars($row['name']); ?></td>
+                    <td><?php echo htmlspecialchars($row['brand']); ?></td>
+                    <td>R<?php echo number_format($row['price'], 2); ?></td>
+                    <td><?php echo $row['quantity']; ?></td>
+                    <td><a class="button-link table-button" href="user/products.php?add=<?php echo $row['cloth_id']; ?>">AddToCart</a></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
 </div>
 
 <div class="section">

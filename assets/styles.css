@@ -65,6 +65,31 @@ body {
     color: #ddd;
 }
 
+.goal-list {
+    list-style: disc inside;
+    color: #ddd;
+    max-width: 900px;
+    margin: 12px auto 0;
+    line-height: 1.8;
+}
+
+.section-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.table-product-image {
+    width: 90px;
+    height: 70px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
 /* =========================
    BUTTONS
 ========================= */

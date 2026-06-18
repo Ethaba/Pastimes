@@ -51,6 +51,7 @@ $items = $cart->GetItems();
     <form method="POST">
         <table>
             <tr>
+                <th>Picture</th>
                 <th>Item</th>
                 <th>Brand</th>
                 <th>Price</th>
@@ -61,6 +62,7 @@ $items = $cart->GetItems();
 
             <?php foreach ($items as $item) { ?>
                 <tr>
+                    <td><img class="table-product-image" src="<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>"></td>
                     <td><?php echo htmlspecialchars($item['name']); ?></td>
                     <td><?php echo htmlspecialchars($item['brand']); ?></td>
                     <td>R<?php echo number_format($item['price'], 2); ?></td>
