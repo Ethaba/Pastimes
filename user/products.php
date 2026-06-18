@@ -31,6 +31,43 @@ if ($search != "") {
 } else {
     $result = $conn->query("SELECT * FROM tblClothes WHERE status='available' AND quantity > 0");
 }
+
+function normalizeImagePath($imagePath) {
+    $imagePath = trim(str_replace('\\', '/', $imagePath));
+    if ($imagePath === '') {
+        return 'images/OIP.webp';
+    }
+    if (preg_match('#^assets/images/#i', $imagePath)) {
+        $imagePath = preg_replace('#^assets/images/#i', 'images/', $imagePath);
+    }
+    if (!preg_match('#^(https?://|/|images/)#i', $imagePath)) {
+        $imagePath = 'images/' . ltrim($imagePath, '/');
+    }
+    return $imagePath;
+}
+
+function resolveImageUrl($imagePath, $serverBaseDir, $urlPrefix = '') {
+    $imagePath = normalizeImagePath($imagePath);
+    if (preg_match('#^(https?://|/)#i', $imagePath)) {
+        return $imagePath;
+    }
+
+    $serverPath = realpath($serverBaseDir . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $imagePath));
+    if ($serverPath && file_exists($serverPath)) {
+        return $urlPrefix . $imagePath;
+    }
+
+    $base = preg_replace('#\.[^.]+$#', '', $imagePath);
+    foreach (['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'] as $ext) {
+        $candidate = $base . '.' . $ext;
+        $candidateServerPath = realpath($serverBaseDir . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $candidate));
+        if ($candidateServerPath && file_exists($candidateServerPath)) {
+            return $urlPrefix . $candidate;
+        }
+    }
+
+    return $urlPrefix . $imagePath;
+}
 ?>
 
 <link rel="stylesheet" href="../assets/styles.css">
@@ -64,7 +101,7 @@ if ($search != "") {
 
 <?php while ($row = $result->fetch_assoc()) { ?>
     <div class="product">
-        <img src="../<?php echo htmlspecialchars($row['image']); ?>" alt="<?php echo htmlspecialchars($row['name']); ?>" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <img src="<?php echo htmlspecialchars(resolveImageUrl($row['image'], realpath(__DIR__ . '/..'), '../')); ?>" alt="<?php echo htmlspecialchars($row['name']); ?>" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="image-placeholder">Image coming soon</div>
         <h4><?php echo htmlspecialchars($row['name']); ?></h4>
         <p><strong>Brand:</strong> <?php echo htmlspecialchars($row['brand']); ?></p>

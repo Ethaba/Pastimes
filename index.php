@@ -54,6 +54,43 @@ $result = $conn->query("
     ORDER BY cloth_id DESC
     LIMIT 8
 ");
+
+function normalizeImagePath($imagePath) {
+    $imagePath = trim(str_replace('\\', '/', $imagePath));
+    if ($imagePath === '') {
+        return 'images/OIP.webp';
+    }
+    if (preg_match('#^assets/images/#i', $imagePath)) {
+        $imagePath = preg_replace('#^assets/images/#i', 'images/', $imagePath);
+    }
+    if (!preg_match('#^(https?://|/|images/)#i', $imagePath)) {
+        $imagePath = 'images/' . ltrim($imagePath, '/');
+    }
+    return $imagePath;
+}
+
+function resolveImageUrl($imagePath, $serverBaseDir, $urlPrefix = '') {
+    $imagePath = normalizeImagePath($imagePath);
+    if (preg_match('#^(https?://|/)#i', $imagePath)) {
+        return $imagePath;
+    }
+
+    $serverPath = realpath($serverBaseDir . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $imagePath));
+    if ($serverPath && file_exists($serverPath)) {
+        return $urlPrefix . $imagePath;
+    }
+
+    $base = preg_replace('#\.[^.]+$#', '', $imagePath);
+    foreach (['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'] as $ext) {
+        $candidate = $base . '.' . $ext;
+        $candidateServerPath = realpath($serverBaseDir . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $candidate));
+        if ($candidateServerPath && file_exists($candidateServerPath)) {
+            return $urlPrefix . $candidate;
+        }
+    }
+
+    return $urlPrefix . $imagePath;
+}
 ?>
 
 <div class="section">
@@ -61,16 +98,20 @@ $result = $conn->query("
 
     <div class="products">
 
-        <?php while ($row = $result->fetch_assoc()) { ?>
+<<<<<<< HEAD
+        <?php while ($row = $result->fetch_assoc()) { 
+            $safeImage = htmlspecialchars(resolveImageUrl($row['image'], __DIR__, ''));
+        ?>
 
             <div class="product">
 
                 <img 
-                    src="<?php echo htmlspecialchars($row['image']); ?>" 
+                    src="<?php echo $safeImage; ?>" 
                     alt="<?php echo htmlspecialchars($row['name']); ?>"
                     style="width:100%; border-radius:8px;"
-                    onerror="this.style.display='none';"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                 >
+                <div class="image-placeholder">Image coming soon</div>
 
                 <h4><?php echo htmlspecialchars($row['name']); ?></h4>
 

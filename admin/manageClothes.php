@@ -2,6 +2,21 @@
 session_start();
 include("../config/DBConn.php");
 
+function normalizeImagePath($imagePath) {
+    $imagePath = trim(str_replace('\\', '/', $imagePath));
+    if ($imagePath === '') {
+        return 'images/OIP.webp';
+    }
+    if (preg_match('#^(https?://|/|[A-Za-z]:)#i', $imagePath)) {
+        return $imagePath;
+    }
+    $imagePath = preg_replace('#^assets/images/#i', 'images/', $imagePath);
+    if (!preg_match('#^(images/|assets/)#i', $imagePath)) {
+        $imagePath = 'images/' . ltrim($imagePath, '/');
+    }
+    return $imagePath;
+}
+
 if (!isset($_SESSION['admin'])) {
     header("Location: adminLogin.php");
     exit();
@@ -34,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = mysqli_real_escape_string($conn, trim($_POST['description']));
     $price = mysqli_real_escape_string($conn, trim($_POST['price']));
     $size = mysqli_real_escape_string($conn, trim($_POST['size']));
-    $image = mysqli_real_escape_string($conn, trim($_POST['image']));
+    $image = mysqli_real_escape_string($conn, normalizeImagePath($_POST['image']));
     $quantity = mysqli_real_escape_string($conn, trim($_POST['quantity']));
     $status = mysqli_real_escape_string($conn, trim($_POST['status']));
 
@@ -99,7 +114,8 @@ $clothes = $conn->query("SELECT * FROM tblClothes ORDER BY cloth_id DESC");
         <input type="text" name="size" required value="<?php echo $editItem ? htmlspecialchars($editItem['size']) : ''; ?>">
 
         <label>Image Path</label>
-        <input type="text" name="image" required value="<?php echo $editItem ? htmlspecialchars($editItem['image']) : 'assets/images/item.jpg'; ?>">
+        <input type="text" name="image" required value="<?php echo $editItem ? htmlspecialchars($editItem['image']) : 'images/OIP.webp'; ?>">
+        <small>Use a filename like <code>JF2454_21_model.avif</code> or a path like <code>images/your-image.avif</code>.</small>
 
         <label>Quantity</label>
         <input type="number" name="quantity" min="0" required value="<?php echo $editItem ? $editItem['quantity'] : '1'; ?>">
